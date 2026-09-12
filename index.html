@@ -15,18 +15,26 @@
             font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
         }
 
+        /* 전체 레이아웃 (상단 컨테이너 + 하단 버튼) */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
         .container {
             display: flex;
             align-items: center;
             gap: 30px; /* 상자와 하트 사이의 간격 */
         }
 
-        /* 양쪽 상자와 바를 묶어주는 래퍼 (위아래 정렬용) */
+        /* 양쪽 상자와 바를 묶어주는 래퍼 */
         .box-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px; /* 상자와 호감도 바 사이의 간격 */
+            gap: 15px;
             width: 150px;
         }
 
@@ -48,12 +56,10 @@
             transition: all 0.2s ease;
         }
 
-        /* 마우스를 올렸을 때 살짝 강조 */
         .box:hover {
             background-color: #f0f0f0;
         }
 
-        /* 클릭될 때 살짝 눌리는 효과 */
         .box:active {
             transform: scale(0.95);
         }
@@ -66,18 +72,16 @@
             opacity: 0;
             transition: opacity 0.5s ease, transform 0.1s ease;
             cursor: default;
-            user-select: none; /* 드래그 방지 */
+            user-select: none;
         }
 
-        /* 하트가 나타날 때 적용될 클래스 및 애니메이션 */
         .heart.show {
             visibility: visible;
             opacity: 1;
-            cursor: pointer; /* 보일 때부터는 클릭 가능함을 마우스로 표시 */
+            cursor: pointer;
             animation: popHeart 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 하트를 누를 때 쿵쾅거리는 효과 */
         .heart.show:active {
             transform: scale(0.8);
         }
@@ -88,33 +92,30 @@
             100% { transform: scale(1); }
         }
 
-        /* 호감도 퍼센티지 바 전체 테두리 */
+        /* 호감도 퍼센티지 바 */
         .progress-container {
             width: 100%;
             height: 22px;
             border: 2px solid black;
             background-color: white;
             position: relative;
-            visibility: hidden; /* 처음엔 숨김 */
+            visibility: hidden;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        /* 호감도 바가 화면에 나타날 때 */
         .progress-container.show {
             visibility: visible;
             opacity: 1;
         }
 
-        /* 차오르는 핑크색 게이지 */
         .progress-bar {
             height: 100%;
-            width: 0%; /* 처음엔 0% */
-            background-color: #ff9fb3; /* 예쁜 핑크색 */
-            transition: width 0.3s ease; /* 부드럽게 차오르는 애니메이션 */
+            width: 0%;
+            background-color: #ff9fb3;
+            transition: width 0.2s ease;
         }
 
-        /* 퍼센트 글씨 */
         .progress-text {
             position: absolute;
             top: 0;
@@ -129,40 +130,70 @@
             color: black;
         }
 
-        /* 좌측 상자의 균형을 맞추기 위한 투명 빈 공간 */
         .placeholder {
-            height: 26px; /* 테두리 포함한 프로그레스 바 높이와 동일하게 */
+            height: 26px;
             width: 100%;
+        }
+
+        /* 다시 시작 버튼 스타일 (동일하게 검은 테두리 직사각형) */
+        .reset-btn {
+            width: 120px;
+            height: 40px;
+            border: 2px solid black;
+            border-radius: 0;
+            background-color: white;
+            color: black;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none; /* 100% 되기 전까지 숨김 */
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn.show {
+            display: block;
+        }
+
+        .reset-btn:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .reset-btn:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- 좌측 섹션 -->
-        <div class="box-wrapper">
-            <div class="box" id="leftBox">🖱️ 클릭</div>
-            <!-- 우측에 생길 바와 균형을 맞추기 위한 투명 공간 -->
-            <div class="placeholder"></div> 
-        </div>
-        
-        <!-- 중앙 하트 -->
-        <div class="heart" id="heart">❤️</div>
-        
-        <!-- 우측 섹션 -->
-        <div class="box-wrapper">
-            <div class="box" id="rightBox">🖱️ 클릭</div>
+    <div class="wrapper">
+        <div class="container">
+            <!-- 좌측 섹션 -->
+            <div class="box-wrapper">
+                <div class="box" id="leftBox">🖱️ 클릭</div>
+                <div class="placeholder"></div> 
+            </div>
             
-            <!-- 호감도 바 (황서현 아래) -->
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar" id="progressBar"></div>
-                <div class="progress-text" id="progressText">0%</div>
+            <!-- 중앙 하트 -->
+            <div class="heart" id="heart">❤️</div>
+            
+            <!-- 우측 섹션 -->
+            <div class="box-wrapper">
+                <div class="box" id="rightBox">🖱️ 클릭</div>
+                
+                <!-- 호감도 바 -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <div class="progress-text" id="progressText">0%</div>
+                </div>
             </div>
         </div>
+
+        <!-- 다시 시작 버튼 -->
+        <button class="reset-btn" id="resetBtn">🔄 다시 시작</button>
     </div>
 
     <script>
-        // 요소 가져오기
         const leftBox = document.getElementById('leftBox');
         const rightBox = document.getElementById('rightBox');
         const heart = document.getElementById('heart');
@@ -170,13 +201,13 @@
         const progressContainer = document.getElementById('progressContainer');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
+        const resetBtn = document.getElementById('resetBtn');
 
-        // 상태 저장 변수
         let isLeftClicked = false;
         let isRightClicked = false;
-        let affectionLevel = 0; // 호감도 퍼센트
+        let affectionLevel = 0;
 
-        // 좌측 상자 클릭 이벤트
+        // 좌측 상자 클릭
         leftBox.addEventListener('click', () => {
             if (!isLeftClicked) {
                 leftBox.innerHTML = '이도윤'; 
@@ -185,7 +216,7 @@
             }
         });
 
-        // 우측 상자 클릭 이벤트
+        // 우측 상자 클릭
         rightBox.addEventListener('click', () => {
             if (!isRightClicked) {
                 rightBox.innerHTML = '황서현'; 
@@ -194,39 +225,62 @@
             }
         });
 
-        // 두 상자 모두 클릭되었는지 확인하고 하트를 띄우는 함수
         function checkBothClicked() {
             if (isLeftClicked && isRightClicked) {
                 heart.classList.add('show'); 
             }
         }
 
-        // 하트 클릭 이벤트 (호감도 올리기)
+        // 하트 클릭 이벤트 (랜덤 호감도 -5% ~ +10%)
         heart.addEventListener('click', () => {
-            // 양쪽 상자가 눌려서 하트가 활성화된 상태에서만 동작
-            if (isLeftClicked && isRightClicked) {
+            if (isLeftClicked && isRightClicked && affectionLevel < 100) {
                 
-                // 처음 하트를 눌렀을 때 호감도 바를 화면에 보여줌
-                if (affectionLevel === 0) {
+                if (!progressContainer.classList.contains('show')) {
                     progressContainer.classList.add('show');
                 }
 
-                // 호감도 증가 (한 번 누를 때마다 10%씩)
-                if (affectionLevel < 100) {
-                    affectionLevel += 10;
+                // -5부터 +10까지의 랜덤 정수 생성
+                const randomDelta = Math.floor(Math.random() * 16) - 5;
+                
+                // 0 미만으로 떨어지지 않게 처리
+                affectionLevel = Math.max(0, affectionLevel + randomDelta);
+
+                // 100% 이상일 경우 처리
+                if (affectionLevel >= 100) {
+                    affectionLevel = 100;
+                    progressBar.style.width = '100%';
+                    progressText.innerHTML = '100% MAX! 💕';
+                    progressText.style.color = 'white';
+                    progressText.style.textShadow = '1px 1px 2px black';
                     
-                    // 게이지 바 너비와 텍스트 업데이트
+                    // 다시 시작 버튼 등장
+                    resetBtn.classList.add('show');
+                } else {
                     progressBar.style.width = affectionLevel + '%';
                     progressText.innerHTML = affectionLevel + '%';
-                    
-                    // 100% 달성 시 텍스트 변경
-                    if (affectionLevel === 100) {
-                        progressText.innerHTML = '100% MAX! 💕';
-                        progressText.style.color = 'white'; // 배경이 분홍색이 되므로 글씨를 하얗게
-                        progressText.style.textShadow = '1px 1px 2px black'; // 하얀 글씨가 잘 보이게 테두리 효과
-                    }
+                    progressText.style.color = 'black';
+                    progressText.style.textShadow = 'none';
                 }
             }
+        });
+
+        // 다시 시작 버튼 클릭 (초기화)
+        resetBtn.addEventListener('click', () => {
+            isLeftClicked = false;
+            isRightClicked = false;
+            affectionLevel = 0;
+
+            leftBox.innerHTML = '🖱️ 클릭';
+            rightBox.innerHTML = '🖱️ 클릭';
+
+            heart.classList.remove('show');
+            progressContainer.classList.remove('show');
+            resetBtn.classList.remove('show');
+
+            progressBar.style.width = '0%';
+            progressText.innerHTML = '0%';
+            progressText.style.color = 'black';
+            progressText.style.textShadow = 'none';
         });
     </script>
 
